@@ -79,7 +79,9 @@ def validate_input(input_path):
             return False
         
         # Check if all document files exist
-        for doc in input_data['documents']:
+        doc_index = 0 # Initialize loop variable
+        while doc_index < len(input_data['documents']): # Iterate through documents
+            doc = input_data['documents'][doc_index]
             if 'filename' not in doc:
                 print("Error: Each document must have a 'filename' field")
                 return False
@@ -88,6 +90,7 @@ def validate_input(input_path):
             if not os.path.exists(pdf_path):
                 print(f"Error: Document file '{pdf_path}' does not exist")
                 return False
+            doc_index += 1 # Increment loop variable
         
         return True
     
