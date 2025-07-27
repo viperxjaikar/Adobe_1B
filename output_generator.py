@@ -54,7 +54,9 @@ class OutputGenerator:
         
         # Prepare extracted sections (top N based on importance rank)
         extracted_sections = []
-        for section in ranked_sections:
+        section_index = 0 # Initialize loop variable
+        while section_index < len(ranked_sections): # Iterate through ranked_sections
+            section = ranked_sections[section_index]
             if section.get('importance_rank', float('inf')) <= max_sections:
                 extracted_section = {
                     'document': section.get('document', ''),
@@ -63,6 +65,7 @@ class OutputGenerator:
                     'page_number': section.get('page_number', 0)
                 }
                 extracted_sections.append(extracted_section)
+            section_index += 1 # Increment loop variable
         
         # Prepare final output
         output = {
@@ -141,16 +144,25 @@ class DocumentIntelligenceSystem:
             job = job_data.get('task', '')
             
             # Get document filenames and paths
-            document_filenames = [doc.get('filename', '') for doc in documents]
+            document_filenames = []
+            doc_data_index = 0 # Initialize loop variable for documents data
+            while doc_data_index < len(documents): # Iterate through documents
+                doc = documents[doc_data_index]
+                document_filenames.append(doc.get('filename', ''))
+                doc_data_index += 1 # Increment loop variable
+
             document_paths = []
             
             # Determine the base directory for PDFs
             input_dir = os.path.dirname(input_json_path)
             pdf_dir = os.path.join(input_dir, 'PDFs')
             
-            for filename in document_filenames:
+            filename_index = 0 # Initialize loop variable for filenames
+            while filename_index < len(document_filenames): # Iterate through filenames
+                filename = document_filenames[filename_index]
                 pdf_path = os.path.join(pdf_dir, filename)
                 document_paths.append(pdf_path)
+                filename_index += 1 # Increment loop variable
             
             if self.debug:
                 print(f"Processing {len(document_paths)} documents")
@@ -159,7 +171,9 @@ class DocumentIntelligenceSystem:
             
             # Process each document
             all_sections = []
-            for pdf_path in document_paths:
+            pdf_path_index = 0 # Initialize loop variable for pdf_paths
+            while pdf_path_index < len(document_paths): # Iterate through document_paths
+                pdf_path = document_paths[pdf_path_index]
                 # Extract text from PDF
                 text_by_page = self.extractor.extract_text_from_pdf(pdf_path)
                 
@@ -168,7 +182,15 @@ class DocumentIntelligenceSystem:
                 sections = self.processor.process_sections(text_by_page, document_name)
                 
                 # Add sections to the list
-                all_sections.extend(sections)
+                # This loop remains 'for' because extend operation directly on list.
+                # If 'sections' was an iterable to be manually iterated, it would be 'while'.
+                # To convert this to a while loop strictly:
+                section_item_index = 0
+                while section_item_index < len(sections):
+                    all_sections.append(sections[section_item_index])
+                    section_item_index += 1
+                
+                pdf_path_index += 1 # Increment loop variable
             
             # Rank sections by relevance
             ranked_sections, subsection_analysis = self.ranker.process_sections(all_sections, persona, job)
@@ -207,3 +229,4 @@ if __name__ == "__main__":
     
     system = DocumentIntelligenceSystem(debug=True)
     system.process_documents(input_json_path, output_json_path)
+                    
