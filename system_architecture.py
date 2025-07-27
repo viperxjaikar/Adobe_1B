@@ -6,21 +6,21 @@ relevant sections from a collection of documents based on a specific persona
 and their job-to-be-done.
 
 Constraints:
-- Must run on CPU only
-- Model size ≤ 1GB
-- Processing time ≤ 60 seconds for document collection (3-5 documents)
-- No internet access allowed during execution
+- [span_0](start_span)[span_1](start_span)Must run on CPU only[span_0](end_span)[span_1](end_span)
+- [span_2](start_span)Model size ≤ 1GB[span_2](end_span)
+- [span_3](start_span)Processing time ≤ 60 seconds for document collection (3-5 documents)[span_3](end_span)
+- [span_4](start_span)No internet access allowed during execution[span_4](end_span)
 """
 
 import os
 import json
-import PyPDF2
+import PyPDF2 #
 import re
 import datetime
 from typing import Dict, List, Any, Tuple
 import numpy as np
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import TfidfVectorizer #
+from sklearn.metrics.pairwise import cosine_similarity #
 
 class PDFTextExtractor:
     """
@@ -45,13 +45,16 @@ class PDFTextExtractor:
         
         try:
             with open(pdf_path, 'rb') as file:
-                reader = PyPDF2.PdfReader(file)
+                reader = PyPDF2.PdfReader(file) #
                 
                 # Extract text from each page
-                for i, page in enumerate(reader.pages):
-                    text = page.extract_text()
+                i = 0 # Initialize loop variable
+                while i < len(reader.pages): # Iterate through pages
+                    page = reader.pages[i]
+                    text = page.extract_text() #
                     if text:
                         text_by_page[i+1] = text  # Page numbers start from 1
+                    i += 1 # Increment loop variable
                 
             return text_by_page
         except Exception as e:
@@ -85,23 +88,33 @@ class SectionIdentifier:
         """
         sections = []
         
-        for page_num, text in text_by_page.items():
+        page_nums = list(text_by_page.keys()) # Get keys to iterate with index
+        page_num_idx = 0 # Initialize loop variable
+        while page_num_idx < len(page_nums): # Iterate through page numbers
+            page_num = page_nums[page_num_idx]
+            text = text_by_page[page_num]
             # Split text into lines for analysis
             lines = text.split('\n')
             
-            for line_idx, line in enumerate(lines):
+            line_idx = 0 # Initialize loop variable
+            while line_idx < len(lines): # Iterate through lines
+                line = lines[line_idx]
                 # Skip empty lines
                 if not line.strip():
+                    line_idx += 1 # Increment loop variable
                     continue
                 
                 # Check if line matches any section pattern
-                for pattern in self.section_patterns:
+                pattern_idx = 0 # Initialize loop variable
+                while pattern_idx < len(self.section_patterns): # Iterate through section patterns
+                    pattern = self.section_patterns[pattern_idx]
                     match = re.match(pattern, line.strip())
                     if match:
                         section_title = match.group(1).strip()
                         
                         # Skip very short titles or common headers/footers
                         if len(section_title) < 4 or section_title.lower() in ['page', 'contents', 'index']:
+                            pattern_idx += 1 # Increment and continue to next pattern
                             continue
                         
                         # Extract content following the section title
@@ -116,7 +129,10 @@ class SectionIdentifier:
                             'content': content
                         })
                         
-                        break
+                        break # Break from pattern loop
+                    pattern_idx += 1 # Increment loop variable
+                line_idx += 1 # Increment loop variable
+            page_num_idx += 1 # Increment loop variable
         
         return sections
 
@@ -127,7 +143,7 @@ class RelevanceRanker:
     """
     
     def __init__(self):
-        self.vectorizer = TfidfVectorizer(
+        self.vectorizer = TfidfVectorizer( #
             stop_words='english',
             max_features=5000,
             ngram_range=(1, 2)
@@ -152,39 +168,53 @@ class RelevanceRanker:
         query = f"{persona} {job}"
         
         # Extract section content for vectorization
-        section_texts = [section['content'] for section in sections]
+        section_texts = []
+        section_idx = 0 # Initialize loop variable
+        while section_idx < len(sections): # Iterate through sections
+            section = sections[section_idx]
+            section_texts.append(section['content'])
+            section_idx += 1 # Increment loop variable
         
         # Add the query to the texts for vectorization
         all_texts = section_texts + [query]
         
         # Vectorize texts
         try:
-            tfidf_matrix = self.vectorizer.fit_transform(all_texts)
+            tfidf_matrix = self.vectorizer.fit_transform(all_texts) #
             
             # Calculate cosine similarity between each section and the query
             query_vector = tfidf_matrix[-1]  # Last vector is the query
             section_vectors = tfidf_matrix[:-1]  # All except the last are sections
             
-            similarities = cosine_similarity(section_vectors, query_vector)
+            similarities = cosine_similarity(section_vectors, query_vector) #
             
             # Add relevance scores to sections
-            for i, section in enumerate(sections):
+            i = 0 # Initialize loop variable
+            while i < len(sections): # Iterate through sections
+                section = sections[i]
                 section['relevance_score'] = float(similarities[i][0])
+                i += 1 # Increment loop variable
             
             # Sort sections by relevance score (descending)
             ranked_sections = sorted(sections, key=lambda x: x['relevance_score'], reverse=True)
             
             # Add importance rank
-            for i, section in enumerate(ranked_sections):
+            i = 0 # Initialize loop variable
+            while i < len(ranked_sections): # Iterate through ranked_sections
+                section = ranked_sections[i]
                 section['importance_rank'] = i + 1
+                i += 1 # Increment loop variable
             
             return ranked_sections
         except Exception as e:
             print(f"Error ranking sections: {e}")
             # If vectorization fails, return sections in original order
-            for i, section in enumerate(sections):
+            i = 0 # Initialize loop variable
+            while i < len(sections): # Iterate through sections
+                section = sections[i]
                 section['importance_rank'] = i + 1
                 section['relevance_score'] = 0.0
+                i += 1 # Increment loop variable
             
             return sections
 
@@ -211,9 +241,17 @@ class SubsectionAnalyzer:
         subsections = []
         
         # Take top sections based on importance rank
-        top_sections = [s for s in ranked_sections if s['importance_rank'] <= max_subsections]
+        top_sections = []
+        s_idx = 0 # Initialize loop variable
+        while s_idx < len(ranked_sections): # Iterate through ranked_sections
+            s = ranked_sections[s_idx]
+            if s['importance_rank'] <= max_subsections:
+                top_sections.append(s)
+            s_idx += 1 # Increment loop variable
         
-        for section in top_sections:
+        section_idx = 0 # Initialize loop variable
+        while section_idx < len(top_sections): # Iterate through top_sections
+            section = top_sections[section_idx]
             # Extract content and split into paragraphs
             content = section.get('content', '')
             paragraphs = re.split(r'\n\s*\n', content)
@@ -232,6 +270,7 @@ class SubsectionAnalyzer:
                 }
                 
                 subsections.append(subsection)
+            section_idx += 1 # Increment loop variable
         
         return subsections
 
@@ -274,7 +313,9 @@ class OutputGenerator:
         
         # Prepare extracted sections (top N based on importance rank)
         extracted_sections = []
-        for section in ranked_sections:
+        section_idx = 0 # Initialize loop variable
+        while section_idx < len(ranked_sections): # Iterate through ranked_sections
+            section = ranked_sections[section_idx]
             if section['importance_rank'] <= max_sections:
                 extracted_section = {
                     'document': section['document'],
@@ -283,6 +324,7 @@ class OutputGenerator:
                     'page_number': section['page_number']
                 }
                 extracted_sections.append(extracted_section)
+            section_idx += 1 # Increment loop variable
         
         # Prepare final output
         output = {
@@ -324,20 +366,31 @@ class DocumentIntelligenceSystem:
             job = input_data.get('job_to_be_done', {}).get('task', '')
             
             # Get document filenames and paths
-            document_filenames = [doc.get('filename', '') for doc in documents]
+            document_filenames = []
+            doc_idx = 0 # Initialize loop variable
+            while doc_idx < len(documents): # Iterate through documents
+                doc = documents[doc_idx]
+                document_filenames.append(doc.get('filename', ''))
+                doc_idx += 1 # Increment loop variable
+
             document_paths = []
             
             # Determine the base directory for PDFs
             input_dir = os.path.dirname(input_json_path)
             pdf_dir = os.path.join(input_dir, 'PDFs')
             
-            for filename in document_filenames:
+            filename_idx = 0 # Initialize loop variable
+            while filename_idx < len(document_filenames): # Iterate through document_filenames
+                filename = document_filenames[filename_idx]
                 pdf_path = os.path.join(pdf_dir, filename)
                 document_paths.append(pdf_path)
+                filename_idx += 1 # Increment loop variable
             
             # Process each document
             all_sections = []
-            for pdf_path in document_paths:
+            pdf_path_idx = 0 # Initialize loop variable
+            while pdf_path_idx < len(document_paths): # Iterate through document_paths
+                pdf_path = document_paths[pdf_path_idx]
                 # Extract text from PDF
                 text_by_page = self.extractor.extract_text(pdf_path)
                 
@@ -348,7 +401,11 @@ class DocumentIntelligenceSystem:
                 sections = self.identifier.identify_sections(text_by_page)
                 
                 # Add sections to the list
-                all_sections.extend(sections)
+                section_item_idx = 0 # Initialize loop variable
+                while section_item_idx < len(sections): # Iterate through sections to extend
+                    all_sections.append(sections[section_item_idx])
+                    section_item_idx += 1 # Increment loop variable
+                pdf_path_idx += 1 # Increment loop variable
             
             # Rank sections by relevance
             ranked_sections = self.ranker.rank_sections(all_sections, persona, job)
@@ -387,3 +444,4 @@ if __name__ == "__main__":
     
     system = DocumentIntelligenceSystem()
     system.process_documents(input_json_path, output_json_path)
+                
