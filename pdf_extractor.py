@@ -7,7 +7,7 @@ preserving page numbers, and preprocessing the text for better section identific
 
 import os
 import re
-import PyPDF2
+import PyPDF2 #
 from typing import Dict, List, Any, Tuple, Optional
 
 class PDFTextExtractor:
@@ -38,15 +38,18 @@ class PDFTextExtractor:
         
         try:
             with open(pdf_path, 'rb') as file:
-                reader = PyPDF2.PdfReader(file)
+                reader = PyPDF2.PdfReader(file) #
                 
                 # Extract text from each page
-                for i, page in enumerate(reader.pages):
-                    text = page.extract_text()
+                i = 0 # Initialize loop variable
+                while i < len(reader.pages): # Iterate through pages
+                    page = reader.pages[i]
+                    text = page.extract_text() #
                     if text:
                         # Preprocess the text
                         text = self._preprocess_text(text)
                         text_by_page[i+1] = text  # Page numbers start from 1
+                    i += 1 # Increment loop variable
                 
             if self.debug:
                 print(f"Extracted text from {pdf_path} ({len(text_by_page)} pages)")
@@ -105,8 +108,12 @@ class PDFTextExtractor:
         ]
         
         # Process each page
-        for page_num in sorted(text_by_page.keys()):
+        page_nums = sorted(text_by_page.keys())
+        page_num_idx = 0 # Initialize loop variable
+        while page_num_idx < len(page_nums): # Iterate through page numbers
+            page_num = page_nums[page_num_idx]
             if isinstance(page_num, str):  # Skip metadata keys
+                page_num_idx += 1 # Increment loop variable
                 continue
                 
             text = text_by_page[page_num]
@@ -123,14 +130,17 @@ class PDFTextExtractor:
                 
                 # Check if line matches any section pattern
                 is_section_title = False
-                for pattern in section_patterns:
+                pattern_idx = 0 # Initialize loop variable
+                while pattern_idx < len(section_patterns): # Iterate through section patterns
+                    pattern = section_patterns[pattern_idx]
                     match = re.match(pattern, line)
                     if match:
                         section_title = match.group(1).strip()
                         
                         # Skip very short titles or common headers/footers
                         if len(section_title) < 4 or section_title.lower() in ['page', 'contents', 'index']:
-                            break
+                            pattern_idx += 1 # Increment and continue to next pattern
+                            continue
                         
                         # If we have a current section, finalize it
                         if current_section:
@@ -146,7 +156,8 @@ class PDFTextExtractor:
                         }
                         
                         is_section_title = True
-                        break
+                        break # Break from pattern loop
+                    pattern_idx += 1 # Increment loop variable
                 
                 if not is_section_title and current_section:
                     # Add line to current section content
@@ -155,6 +166,7 @@ class PDFTextExtractor:
                     current_section['content'] += line
                 
                 line_idx += 1
+            page_num_idx += 1 # Increment loop variable
         
         # Add the last section if it exists
         if current_section:
@@ -162,11 +174,15 @@ class PDFTextExtractor:
         
         # If no sections were found, create a default section for each page
         if not sections:
-            for page_num, text in text_by_page.items():
+            page_num_keys = list(text_by_page.keys())
+            page_num_keys_idx = 0 # Initialize loop variable
+            while page_num_keys_idx < len(page_num_keys): # Iterate through page numbers
+                page_num = page_num_keys[page_num_keys_idx]
                 if isinstance(page_num, str):  # Skip metadata keys
+                    page_num_keys_idx += 1 # Increment loop variable
                     continue
                 
-                # Try to extract a title from the first line
+                text = text_by_page[page_num]
                 lines = text.split('\n')
                 title = lines[0].strip() if lines else f"Page {page_num}"
                 
@@ -180,6 +196,7 @@ class PDFTextExtractor:
                 }
                 
                 sections.append(section)
+                page_num_keys_idx += 1 # Increment loop variable
         
         return sections
     
@@ -193,14 +210,18 @@ class PDFTextExtractor:
         Returns:
             Updated list of sections with identified subsections
         """
-        for section in sections:
+        section_idx = 0 # Initialize loop variable
+        while section_idx < len(sections): # Iterate through sections
+            section = sections[section_idx]
             content = section.get('content', '')
             
             # Split content into paragraphs
             paragraphs = re.split(r'\n\s*\n', content)
             
             # Process each paragraph as a potential subsection
-            for paragraph in paragraphs:
+            paragraph_idx = 0 # Initialize loop variable
+            while paragraph_idx < len(paragraphs): # Iterate through paragraphs
+                paragraph = paragraphs[paragraph_idx]
                 if len(paragraph.strip()) > 50:  # Minimum length for a subsection
                     subsection = {
                         'text': paragraph.strip(),
@@ -208,6 +229,8 @@ class PDFTextExtractor:
                     }
                     
                     section['subsections'].append(subsection)
+                paragraph_idx += 1 # Increment loop variable
+            section_idx += 1 # Increment loop variable
         
         return sections
     
@@ -246,10 +269,13 @@ if __name__ == "__main__":
     sections = extractor.process_pdf(pdf_path)
     
     print(f"\nFound {len(sections)} sections:")
-    for i, section in enumerate(sections):
+    i = 0 # Initialize loop variable
+    while i < len(sections): # Iterate through sections
+        section = sections[i]
         print(f"\n{i+1}. {section['section_title']} (Page {section['page_number']})")
         print(f"   Subsections: {len(section['subsections'])}")
         
         # Print first few characters of content
         content_preview = section['content'][:100] + "..." if len(section['content']) > 100 else section['content']
         print(f"   Content: {content_preview}")
+        i += 1 # Increment loop variable
