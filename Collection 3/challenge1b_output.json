@@ -1,0 +1,77 @@
+{
+    "metadata": {
+        "input_documents": [
+            "Breakfast Ideas.pdf",
+            "Dinner Ideas - Mains_1.pdf",
+            "Dinner Ideas - Mains_2.pdf",
+            "Dinner Ideas - Mains_3.pdf",
+            "Dinner Ideas - Sides_1.pdf",
+            "Dinner Ideas - Sides_2.pdf",
+            "Dinner Ideas - Sides_3.pdf",
+            "Dinner Ideas - Sides_4.pdf",
+            "Lunch Ideas.pdf"
+        ],
+        "persona": "Food Contractor",
+        "job_to_be_done": "Prepare a vegetarian buffet-style dinner menu for a corporate gathering, including gluten-free items.",
+        "processing_timestamp": "2025-07-25T02:56:25.842275"
+    },
+    "extracted_sections": [
+        {
+            "document": "Dinner Ideas - Sides_1.pdf",
+            "section_title": "o Oil for frying \u2022 Instructions : o Mix grated cassava with coconut milk and salt. o Form mixture into flat cakes. o Fry in hot oil until golden. o Drain on paper towels and serve warm. Banchan \u2022 Ingredients : o Assorted small side dishes like pickled radish, spinach, bean sprouts, kimchi \u2022 Instructions : o Prepare each side dish separately. o Arrange on small plates. o Serve as accompaniments to the main meal. Banh Beo \u2022 Ingredients : o 1 cup rice flour o 1/2 cup water o 1/2 cup coconut milk o 1/4 cup shrimp o 1/4 cup green onions o 1/4 cup fried shallots o 1 teaspoon salt o 1/2 teaspoon sugar \u2022 Instructions : o Mix rice flour, water, coconut milk, sal t, and sugar to form a batter. o Pour batter into small dishes and steam until set. o Saut\u00e9 chopped shrimp and green onions until cooked. o Top steamed cakes with shrimp, green onions, and fried shallots. o Serve with dipping sauce. Banh Xeo \u2022 Ingredients : o 1 cup rice flour o 1/2 cup coconut milk o 1/2 cup water o 1/2 pound shrimp o 1/2 pound pork o 1 small onion o 1/2 cup bean sprouts o 1/4 cup green onions o 1/4 cup cilantro o 1 teaspoon turmeric",
+            "importance_rank": 1,
+            "page_number": 5
+        },
+        {
+            "document": "Dinner Ideas - Sides_2.pdf",
+            "section_title": "o 1/4 cup olive oil o Rosemary o Sea salt \u2022 Instructions : o Dissolve yeast and sugar in warm water, let sit until foamy. o Mix flour and salt in a bowl, then add yeast mixtur e and olive oil. o Knead until smooth, then let rise until doubled. o Press dough into a baking pan, dimple with fingers, and sprinkle with rosemary and sea salt. o Bake at 400\u00b0F (200\u00b0C) for 20 -25 minutes until golden. Freekeh Salad \u2022 Ingredients : o 1 cup freekeh o 2 cups water o 1 small onion o 1/4 cup parsley o 1/4 cup mint o 1/4 cup lemon juice o 1/4 cup olive oil o 1 teaspoon salt \u2022 Instructions : o Rinse freekeh and cook in water until tender, then drain. o Saut\u00e9 diced onion in olive oil until softened. o Mix freekeh with saut\u00e9ed oni on, chopped parsley, and mint. o Whisk lemon juice, olive oil, and salt, then pour over salad. o Toss well and serve. Fried Plantains \u2022 Ingredients : o 2 ripe plantains o 1 cup vegetable oil o 1 teaspoon salt \u2022 Instructions : o Peel and slice plantains. o Heat oil in a pan and fry plantain slices until golden. o Drain on paper towels and sprinkle with salt. o Serve warm. Fried Rice \u2022 Ingredients : o 2 cups cooked rice o 1 small onion o 1/2 cup peas",
+            "importance_rank": 2,
+            "page_number": 10
+        },
+        {
+            "document": "Dinner Ideas - Sides_1.pdf",
+            "section_title": "\u2022 Instructions : o Form risotto into balls and stuff with a cube of mozzarella. o Dredge balls in flour, dip in beaten eggs, and coat with breadcrumbs . o Fry in hot oil until golden. o Drain on paper towels and serve warm. Baba Ganoush \u2022 Ingredients : o 2 eggplants o 1/4 cup tahini o 1/4 cup lemon juice o 2 cloves garlic o 1/4 cup olive oil o 1 teaspoon salt \u2022 Instructions : o Roast eggplants until soft, then peel and mash. o Blend mashed eggplant, tahini, lemon juice, minced garlic, and salt in a food processor. o Slowly add olive oil while blending until smooth. o Serve with a drizzle of olive oil. Baked Beans \u2022 Ingredients : o 4 cups cooked navy beans o 1 small onion o 1/2 cup molasses o 1/4 cup brown sugar o 1/4 cup ketchup o 1 tablespoon mustard o 1 teaspoon salt o 1/2 teaspoon pepper \u2022 Instructions : o Preheat oven to 350\u00b0F (175\u00b0C). o Saut\u00e9 diced onion until translucent. o Mix beans, onion, molasses, brown sugar, ketchup, mustard, salt, and pepper in a baking dish. o Bake for 1 hour, stirring occasionally. o Serve warm. Bammy \u2022 Ingredients : o 2 cups grated cassava o 1/4 cup coconut milk o 1 teaspoon salt",
+            "importance_rank": 3,
+            "page_number": 4
+        },
+        {
+            "document": "Dinner Ideas - Sides_2.pdf",
+            "section_title": "o 1 teaspoon paprika o 1 teaspoon salt o Oil for frying \u2022 Instructions : o Mix flour, butter, water, and beaten egg to form a dough, then let rest. o Saut\u00e9 ground beef, diced onion, minced garlic, chopped olives, and raisins with cumin, paprika, and salt until cooked. o Roll out dough and cut into circles. o Place a spoonful of filling on each circle and fold to seal. o Fry in hot oil until golden. o Drain on paper towels and serve warm. Escalivada \u2022 Ingredients : o 2 eggplants o 2 bell peppers o 2 tomatoes o 1 small onion o 1/4 cup olive oil o 1 teaspoon salt \u2022 Instructions : o Preheat oven to 400\u00b0F (200\u00b0C). o Roast eggplants, bell peppers, tomatoes, and onion until tender. o Peel and slice vegetables. o Arrange on a plate and drizzle with olive oil. o Sprinkle wit h salt and serve warm or at room temperature. Falafel \u2022 Ingredients : o 1 can chickpeas o 1 small onion o 2 cloves garlic o 1/4 cup parsley o 1 teaspoon cumin o 1 teaspoon coriander o 1 teaspoon salt o 1/4 cup flour o Oil for frying \u2022 Instructions : o Drain and rinse chickpeas. o Blend chickpeas, diced onion, minced garlic, chopped parsley, cumin, coriander, and salt in a food processor. o Add flour and mix until combined. o Form mixture into balls and fry in hot oil until golden.",
+            "importance_rank": 4,
+            "page_number": 7
+        },
+        {
+            "document": "Dinner Ideas - Sides_3.pdf",
+            "section_title": "Hummus \u2022 Ingredients : o 1 can chickpeas o 1/4 cup tahini o 1/4 cup lemon juice o 2 cloves garlic o 1/4 cup olive oil o 1 teaspoon salt \u2022 Instructions : o Drain and rinse chickpeas. o Blend chickpeas, tahini, lemon juice, minced garlic, and salt in a food processor. o Slowly add olive oil while blending until smooth. o Serve with a drizzle of olive oil. Japchae \u2022 Ingredients : o 8 ounces sweet potato noodles o 1/2 pound beef o 1 small onion o 1 carrot o 1 bell pepper o 1 cup spinach o 2 tablespoons soy sauce o 1 tablespoon sesame oil o 1 tablespoon sugar o 1 tablespoon sesame seeds \u2022 Instructions : o Cook noodles according to package instructions, then drain. o Saut\u00e9 sliced beef, diced onion, julienned carrot, and bell pepper in sesame oil until cooked. o Add spinach and cook until wilted. o Mix noodles with soy sauce, sugar, and sesame seeds. o Combine with cooked beef and vegetables. o Serve warm. Jerk Veg etables \u2022 Ingredients : o 1 cup broccoli o 1 cup bell peppers o 1 cup zucchini o 1 small onion o 2 cloves garlic o 2 tablespoons jerk seasoning",
+            "importance_rank": 5,
+            "page_number": 2
+        }
+    ],
+    "subsection_analysis": [
+        {
+            "document": "Dinner Ideas - Sides_1.pdf",
+            "refined_text": "o Oil for frying \u2022 Instructions : o Mix grated cassava with coconut milk and salt. o Form mixture into flat cakes. o Fry in hot oil until golden. o Drain on paper towels and serve warm. Banchan \u2022 Ingredients : o Assorted small side dishes like pickled radish, spinach, bean sprouts, kimchi \u2022 Instructions : o Prepare each side dish separately. o Arrange on small plates. o Serve as accompaniments to the main meal. Banh Beo \u2022 Ingredients : o 1 cup rice flour o 1/2 cup water o 1/2 cup coconut milk o 1/4 cup shrimp o 1/4 cup green onions o 1/4 cup fried shallots o 1 teaspoon salt o 1/2 teaspoon sugar \u2022 Instructions : o Mix rice flour, water, coconut milk, sal t, and sugar to form a batter. o Pour batter into small dishes and steam until set. o Saut\u00e9 chopped shrimp and green onions until cooked. o Top steamed cakes with shrimp, green onions, and fried shallots. o Serve with dipping sauce. Banh Xeo \u2022 Ingredients : o 1 cup rice flour o 1/2 cup coconut milk o 1/2 cup water o 1/2 pound shrimp o 1/2 pound pork o 1 small onion o 1/2 cup bean sprouts o 1/4 cup green onions o 1/4 cup cilantro o 1 teaspoon turmeric",
+            "page_number": 5
+        },
+        {
+            "document": "Dinner Ideas - Sides_2.pdf",
+            "refined_text": "o 1/4 cup olive oil o Rosemary o Sea salt \u2022 Instructions : o Dissolve yeast and sugar in warm water, let sit until foamy. o Mix flour and salt in a bowl, then add yeast mixtur e and olive oil. o Knead until smooth, then let rise until doubled. o Press dough into a baking pan, dimple with fingers, and sprinkle with rosemary and sea salt. o Bake at 400\u00b0F (200\u00b0C) for 20 -25 minutes until golden. Freekeh Salad \u2022 Ingredients : o 1 cup freekeh o 2 cups water o 1 small onion o 1/4 cup parsley o 1/4 cup mint o 1/4 cup lemon juice o 1/4 cup olive oil o 1 teaspoon salt \u2022 Instructions : o Rinse freekeh and cook in water until tender, then drain. o Saut\u00e9 diced onion in olive oil until softened. o Mix freekeh with saut\u00e9ed oni on, chopped parsley, and mint. o Whisk lemon juice, olive oil, and salt, then pour over salad. o Toss well and serve. Fried Plantains \u2022 Ingredients : o 2 ripe plantains o 1 cup vegetable oil o 1 teaspoon salt \u2022 Instructions : o Peel and slice plantains. o Heat oil in a pan and fry plantain slices until golden. o Drain on paper towels and sprinkle with salt. o Serve warm. Fried Rice \u2022 Ingredients : o 2 cups cooked rice o 1 small onion o 1/2 cup peas",
+            "page_number": 10
+        },
+        {
+            "document": "Dinner Ideas - Sides_1.pdf",
+            "refined_text": "\u2022 Instructions : o Form risotto into balls and stuff with a cube of mozzarella. o Dredge balls in flour, dip in beaten eggs, and coat with breadcrumbs . o Fry in hot oil until golden. o Drain on paper towels and serve warm. Baba Ganoush \u2022 Ingredients : o 2 eggplants o 1/4 cup tahini o 1/4 cup lemon juice o 2 cloves garlic o 1/4 cup olive oil o 1 teaspoon salt \u2022 Instructions : o Roast eggplants until soft, then peel and mash. o Blend mashed eggplant, tahini, lemon juice, minced garlic, and salt in a food processor. o Slowly add olive oil while blending until smooth. o Serve with a drizzle of olive oil. Baked Beans \u2022 Ingredients : o 4 cups cooked navy beans o 1 small onion o 1/2 cup molasses o 1/4 cup brown sugar o 1/4 cup ketchup o 1 tablespoon mustard o 1 teaspoon salt o 1/2 teaspoon pepper \u2022 Instructions : o Preheat oven to 350\u00b0F (175\u00b0C). o Saut\u00e9 diced onion until translucent. o Mix beans, onion, molasses, brown sugar, ketchup, mustard, salt, and pepper in a baking dish. o Bake for 1 hour, stirring occasionally. o Serve warm. Bammy \u2022 Ingredients : o 2 cups grated cassava o 1/4 cup coconut milk o 1 teaspoon salt",
+            "page_number": 4
+        },
+        {
+            "document": "Dinner Ideas - Sides_2.pdf",
+            "refined_text": "o 1 teaspoon paprika o 1 teaspoon salt o Oil for frying \u2022 Instructions : o Mix flour, butter, water, and beaten egg to form a dough, then let rest. o Saut\u00e9 ground beef, diced onion, minced garlic, chopped olives, and raisins with cumin, paprika, and salt until cooked. o Roll out dough and cut into circles. o Place a spoonful of filling on each circle and fold to seal. o Fry in hot oil until golden. o Drain on paper towels and serve warm. Escalivada \u2022 Ingredients : o 2 eggplants o 2 bell peppers o 2 tomatoes o 1 small onion o 1/4 cup olive oil o 1 teaspoon salt \u2022 Instructions : o Preheat oven to 400\u00b0F (200\u00b0C). o Roast eggplants, bell peppers, tomatoes, and onion until tender. o Peel and slice vegetables. o Arrange on a plate and drizzle with olive oil. o Sprinkle wit h salt and serve warm or at room temperature. Falafel \u2022 Ingredients : o 1 can chickpeas o 1 small onion o 2 cloves garlic o 1/4 cup parsley o 1 teaspoon cumin o 1 teaspoon coriander o 1 teaspoon salt o 1/4 cup flour o Oil for frying \u2022 Instructions : o Drain and rinse chickpeas. o Blend chickpeas, diced onion, minced garlic, chopped parsley, cumin, coriander, and salt in a food processor. o Add flour and mix until combined. o Form mixture into balls and fry in hot oil until golden.",
+            "page_number": 7
+        },
+        {
+            "document": "Dinner Ideas - Sides_3.pdf",
+            "refined_text": "Hummus \u2022 Ingredients : o 1 can chickpeas o 1/4 cup tahini o 1/4 cup lemon juice o 2 cloves garlic o 1/4 cup olive oil o 1 teaspoon salt \u2022 Instructions : o Drain and rinse chickpeas. o Blend chickpeas, tahini, lemon juice, minced garlic, and salt in a food processor. o Slowly add olive oil while blending until smooth. o Serve with a drizzle of olive oil. Japchae \u2022 Ingredients : o 8 ounces sweet potato noodles o 1/2 pound beef o 1 small onion o 1 carrot o 1 bell pepper o 1 cup spinach o 2 tablespoons soy sauce o 1 tablespoon sesame oil o 1 tablespoon sugar o 1 tablespoon sesame seeds \u2022 Instructions : o Cook noodles according to package instructions, then drain. o Saut\u00e9 sliced beef, diced onion, julienned carrot, and bell pepper in sesame oil until cooked. o Add spinach and cook until wilted. o Mix noodles with soy sauce, sugar, and sesame seeds. o Combine with cooked beef and vegetables. o Serve warm. Jerk Veg etables \u2022 Ingredients : o 1 cup broccoli o 1 cup bell peppers o 1 cup zucchini o 1 small onion o 2 cloves garlic o 2 tablespoons jerk seasoning",
+            "page_number": 2
+        }
+    ]
+}
