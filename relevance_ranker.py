@@ -10,8 +10,8 @@ import re
 import math
 import string
 from typing import Dict, List, Any, Tuple
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import TfidfVectorizer #
+from sklearn.metrics.pairwise import cosine_similarity #
 
 class RelevanceRanker:
     """
@@ -26,7 +26,7 @@ class RelevanceRanker:
             debug: Whether to print debug information
         """
         self.debug = debug
-        self.vectorizer = TfidfVectorizer(
+        self.vectorizer = TfidfVectorizer( #
             stop_words='english',
             max_features=5000,
             ngram_range=(1, 2)
@@ -66,17 +66,27 @@ class RelevanceRanker:
         """
         # Remove punctuation and convert to lowercase
         text = text.lower()
-        for char in string.punctuation:
+        char_index = 0 # Initialize loop variable
+        while char_index < len(string.punctuation): # Iterate through punctuation
+            char = string.punctuation[char_index]
             text = text.replace(char, ' ')
+            char_index += 1 # Increment loop variable
         
         # Split into words
         words = text.split()
         
         # Remove common stopwords
         stopwords = {'a', 'an', 'the', 'and', 'or', 'but', 'if', 'because', 'as', 'what', 'when', 'where', 'how', 'to', 'in', 'for', 'with', 'by', 'of'}
-        words = [word for word in words if word not in stopwords and len(word) > 2]
         
-        return words
+        filtered_words = []
+        word_index = 0 # Initialize loop variable
+        while word_index < len(words): # Iterate through words
+            word = words[word_index]
+            if word not in stopwords and len(word) > 2:
+                filtered_words.append(word)
+            word_index += 1 # Increment loop variable
+        
+        return filtered_words
     
     def calculate_relevance_scores(self, sections: List[Dict[str, Any]], persona: str, job: str) -> List[Dict[str, Any]]:
         """
@@ -98,7 +108,9 @@ class RelevanceRanker:
         
         # Extract section content for vectorization
         section_texts = []
-        for section in sections:
+        section_index = 0 # Initialize loop variable
+        while section_index < len(sections): # Iterate through sections
+            section = sections[section_index]
             # Combine section title and content for better matching
             title = section.get('section_title', '')
             content = section.get('content', '')
@@ -107,31 +119,38 @@ class RelevanceRanker:
             # Create a combined text representation
             combined_text = f"{title} {title} {content} {keywords}"  # Repeat title for more weight
             section_texts.append(combined_text)
+            section_index += 1 # Increment loop variable
         
         # Add the query to the texts for vectorization
         all_texts = section_texts + [query]
         
         # Vectorize texts
         try:
-            tfidf_matrix = self.vectorizer.fit_transform(all_texts)
+            tfidf_matrix = self.vectorizer.fit_transform(all_texts) #
             
             # Calculate cosine similarity between each section and the query
             query_vector = tfidf_matrix[-1]  # Last vector is the query
             section_vectors = tfidf_matrix[:-1]  # All except the last are sections
             
-            similarities = cosine_similarity(section_vectors, query_vector)
+            similarities = cosine_similarity(section_vectors, query_vector) #
             
             # Add relevance scores to sections
-            for i, section in enumerate(sections):
+            i = 0 # Initialize loop variable
+            while i < len(sections): # Iterate through sections
+                section = sections[i]
                 section['relevance_score'] = float(similarities[i][0])
                 
                 # Apply additional heuristics to adjust scores
                 self._apply_heuristics(section, persona, job)
+                i += 1 # Increment loop variable
             
             if self.debug:
                 print(f"Calculated relevance scores for {len(sections)} sections")
-                for i, section in enumerate(sections):
-                    print(f"  {i+1}. {section.get('section_title', 'Untitled')} - Score: {section.get('relevance_score', 0)}")
+                dbg_idx = 0 # Initialize loop variable for debug print
+                while dbg_idx < len(sections): # Iterate through sections for debug print
+                    section = sections[dbg_idx]
+                    print(f"  {dbg_idx+1}. {section.get('section_title', 'Untitled')} - Score: {section.get('relevance_score', 0)}")
+                    dbg_idx += 1 # Increment loop variable
             
             return sections
         
@@ -140,8 +159,11 @@ class RelevanceRanker:
                 print(f"Error calculating relevance scores: {e}")
             
             # If vectorization fails, assign default scores
-            for i, section in enumerate(sections):
+            i = 0 # Initialize loop variable
+            while i < len(sections): # Iterate through sections
+                section = sections[i]
                 section['relevance_score'] = 1.0 / (i + 1)  # Simple fallback scoring
+                i += 1 # Increment loop variable
             
             return sections
     
@@ -161,13 +183,19 @@ class RelevanceRanker:
         persona_terms = self._extract_key_terms(persona)
         job_terms = self._extract_key_terms(job)
         
-        for term in persona_terms:
+        term_idx = 0 # Initialize loop variable
+        while term_idx < len(persona_terms): # Iterate through persona terms
+            term = persona_terms[term_idx]
             if term in title:
                 score += 0.1
+            term_idx += 1 # Increment loop variable
         
-        for term in job_terms:
+        term_idx = 0 # Reset and Initialize loop variable
+        while term_idx < len(job_terms): # Iterate through job terms
+            term = job_terms[term_idx]
             if term in title:
                 score += 0.2
+            term_idx += 1 # Increment loop variable
         
         # Boost score based on content length (longer content might be more informative)
         word_count = section.get('word_count', 0)
@@ -197,8 +225,11 @@ class RelevanceRanker:
         ranked_sections = sorted(sections, key=lambda x: x.get('relevance_score', 0.0), reverse=True)
         
         # Add importance rank
-        for i, section in enumerate(ranked_sections):
+        i = 0 # Initialize loop variable
+        while i < len(ranked_sections): # Iterate through ranked sections
+            section = ranked_sections[i]
             section['importance_rank'] = i + 1
+            i += 1 # Increment loop variable
         
         return ranked_sections
     
@@ -214,7 +245,13 @@ class RelevanceRanker:
             List of top N sections
         """
         # Take top sections based on importance rank
-        top_sections = [s for s in ranked_sections if s.get('importance_rank', float('inf')) <= max_sections]
+        top_sections = []
+        s_idx = 0 # Initialize loop variable
+        while s_idx < len(ranked_sections): # Iterate through ranked_sections
+            s = ranked_sections[s_idx]
+            if s.get('importance_rank', float('inf')) <= max_sections:
+                top_sections.append(s)
+            s_idx += 1 # Increment loop variable
         
         return top_sections
     
@@ -232,13 +269,20 @@ class RelevanceRanker:
         """
         subsections = []
         
-        for section in top_sections:
+        section_idx = 0 # Initialize loop variable
+        while section_idx < len(top_sections): # Iterate through top sections
+            section = top_sections[section_idx]
             # Get subsections
             section_subsections = section.get('subsections', [])
             
             if section_subsections:
                 # Calculate relevance scores for subsections
-                subsection_texts = [s.get('text', '') for s in section_subsections]
+                subsection_texts = []
+                sub_idx = 0 # Initialize loop variable
+                while sub_idx < len(section_subsections): # Iterate through section_subsections
+                    s = section_subsections[sub_idx]
+                    subsection_texts.append(s.get('text', ''))
+                    sub_idx += 1 # Increment loop variable
                 
                 # Preprocess query
                 query = self.preprocess_query(persona, job)
@@ -248,13 +292,13 @@ class RelevanceRanker:
                 
                 try:
                     # Vectorize texts
-                    tfidf_matrix = self.vectorizer.fit_transform(all_texts)
+                    tfidf_matrix = self.vectorizer.fit_transform(all_texts) #
                     
                     # Calculate cosine similarity between each subsection and the query
                     query_vector = tfidf_matrix[-1]  # Last vector is the query
                     subsection_vectors = tfidf_matrix[:-1]  # All except the last are subsections
                     
-                    similarities = cosine_similarity(subsection_vectors, query_vector)
+                    similarities = cosine_similarity(subsection_vectors, query_vector) #
                     
                     # Select the most relevant subsection
                     best_idx = similarities.argmax()
@@ -296,6 +340,7 @@ class RelevanceRanker:
                     }
                     
                     subsections.append(subsection_analysis)
+            section_idx += 1 # Increment loop variable
         
         return subsections
     
@@ -342,14 +387,23 @@ if __name__ == "__main__":
     job = sys.argv[3]
     
     # Get PDF files
-    pdf_files = [os.path.join(pdf_dir, f) for f in os.listdir(pdf_dir) if f.endswith('.pdf')]
+    pdf_files = []
+    file_list = os.listdir(pdf_dir)
+    file_idx = 0 # Initialize loop variable
+    while file_idx < len(file_list): # Iterate through files
+        f = file_list[file_idx]
+        if f.endswith('.pdf'):
+            pdf_files.append(os.path.join(pdf_dir, f))
+        file_idx += 1 # Increment loop variable
     
     # Process each PDF
     all_sections = []
     extractor = PDFTextExtractor(debug=True)
     processor = SectionProcessor(debug=True)
     
-    for pdf_path in pdf_files:
+    pdf_path_idx = 0 # Initialize loop variable
+    while pdf_path_idx < len(pdf_files): # Iterate through pdf_files
+        pdf_path = pdf_files[pdf_path_idx]
         # Extract text from PDF
         text_by_page = extractor.extract_text_from_pdf(pdf_path)
         
@@ -358,22 +412,34 @@ if __name__ == "__main__":
         sections = processor.process_sections(text_by_page, document_name)
         
         # Add sections to the list
-        all_sections.extend(sections)
+        section_item_idx = 0 # Initialize loop variable
+        while section_item_idx < len(sections): # Iterate through sections to extend
+            all_sections.append(sections[section_item_idx])
+            section_item_idx += 1 # Increment loop variable
+        
+        pdf_path_idx += 1 # Increment loop variable
     
     # Rank sections
     ranker = RelevanceRanker(debug=True)
     ranked_sections, subsection_analysis = ranker.process_sections(all_sections, persona, job)
     
     print(f"\nTop 5 ranked sections:")
-    for i, section in enumerate(ranked_sections[:5]):
+    i = 0 # Initialize loop variable
+    while i < len(ranked_sections) and i < 5: # Iterate through top 5 ranked sections
+        section = ranked_sections[i]
         print(f"\n{i+1}. {section.get('section_title', 'Untitled')} (Page {section.get('page_number', 0)})")
         print(f"   Document: {section.get('document', '')}")
         print(f"   Relevance score: {section.get('relevance_score', 0)}")
         print(f"   Importance rank: {section.get('importance_rank', 0)}")
+        i += 1 # Increment loop variable
     
     print(f"\nSubsection analysis:")
-    for i, subsection in enumerate(subsection_analysis):
+    i = 0 # Initialize loop variable
+    while i < len(subsection_analysis): # Iterate through subsection analysis
+        subsection = subsection_analysis[i]
         print(f"\n{i+1}. Document: {subsection.get('document', '')}")
         print(f"   Page: {subsection.get('page_number', 0)}")
         refined_text = subsection.get('refined_text', '')
         print(f"   Refined text: {refined_text[:100]}..." if len(refined_text) > 100 else f"   Refined text: {refined_text}")
+        i += 1 # Increment loop variable
+        
