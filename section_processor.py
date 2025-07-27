@@ -86,8 +86,11 @@ class SectionProcessor:
         text = text.replace('\r\n', '\n').replace('\r', '\n')
         
         # Remove headers and footers (common patterns)
-        for pattern in self.ignore_patterns:
+        pattern_idx = 0 # Initialize loop variable
+        while pattern_idx < len(self.ignore_patterns): # Iterate through ignore_patterns
+            pattern = self.ignore_patterns[pattern_idx]
             text = re.sub(pattern, '', text, flags=re.MULTILINE)
+            pattern_idx += 1 # Increment loop variable
         
         return text.strip()
     
@@ -110,14 +113,20 @@ class SectionProcessor:
             return False
         
         # Skip lines that match ignore patterns
-        for pattern in self.ignore_patterns:
+        pattern_idx = 0 # Initialize loop variable
+        while pattern_idx < len(self.ignore_patterns): # Iterate through ignore_patterns
+            pattern = self.ignore_patterns[pattern_idx]
             if re.match(pattern, line.strip()):
                 return False
+            pattern_idx += 1 # Increment loop variable
         
         # Check if line matches any section pattern
-        for pattern in self.section_patterns:
+        pattern_idx = 0 # Initialize loop variable
+        while pattern_idx < len(self.section_patterns): # Iterate through section_patterns
+            pattern = self.section_patterns[pattern_idx]
             if re.match(pattern, line.strip()):
                 return True
+            pattern_idx += 1 # Increment loop variable
         
         # Additional heuristics for section titles
         
@@ -131,8 +140,12 @@ class SectionProcessor:
         
         # Contains keywords that suggest a section title
         section_keywords = ['chapter', 'section', 'part', 'introduction', 'conclusion']
-        if any(keyword in line.lower() for keyword in section_keywords) and len(line) <= 50:
-            return True
+        keyword_idx = 0 # Initialize loop variable
+        while keyword_idx < len(section_keywords): # Iterate through section_keywords
+            keyword = section_keywords[keyword_idx]
+            if keyword in line.lower() and len(line) <= 50:
+                return True
+            keyword_idx += 1 # Increment loop variable
         
         return False
     
@@ -147,10 +160,13 @@ class SectionProcessor:
             Extracted section title
         """
         # Check if line matches any section pattern
-        for pattern in self.section_patterns:
+        pattern_idx = 0 # Initialize loop variable
+        while pattern_idx < len(self.section_patterns): # Iterate through section_patterns
+            pattern = self.section_patterns[pattern_idx]
             match = re.match(pattern, line.strip())
             if match:
                 return match.group(1).strip()
+            pattern_idx += 1 # Increment loop variable
         
         # If no pattern matches, use the line as is
         return line.strip()
@@ -170,8 +186,12 @@ class SectionProcessor:
         current_section = None
         
         # Process each page
-        for page_num in sorted(text_by_page.keys()):
+        page_nums_sorted = sorted(text_by_page.keys())
+        page_num_idx = 0 # Initialize loop variable
+        while page_num_idx < len(page_nums_sorted): # Iterate through page numbers
+            page_num = page_nums_sorted[page_num_idx]
             if isinstance(page_num, str):  # Skip metadata keys
+                page_num_idx += 1 # Increment loop variable
                 continue
                 
             text = text_by_page[page_num]
@@ -210,6 +230,7 @@ class SectionProcessor:
                         current_section['content'] += line
                 
                 line_idx += 1
+            page_num_idx += 1 # Increment loop variable
         
         # Add the last section if it exists
         if current_section:
@@ -217,11 +238,15 @@ class SectionProcessor:
         
         # If no sections were found, create a default section for each page
         if not sections:
-            for page_num, text in text_by_page.items():
+            page_keys = list(text_by_page.keys())
+            page_key_idx = 0 # Initialize loop variable
+            while page_key_idx < len(page_keys): # Iterate through page keys
+                page_num = page_keys[page_key_idx]
                 if isinstance(page_num, str):  # Skip metadata keys
+                    page_key_idx += 1 # Increment loop variable
                     continue
                 
-                # Try to extract a title from the first line
+                text = text_by_page[page_num]
                 lines = text.split('\n')
                 title = lines[0].strip() if lines and lines[0].strip() else f"Page {page_num}"
                 
@@ -235,6 +260,7 @@ class SectionProcessor:
                 }
                 
                 sections.append(section)
+                page_key_idx += 1 # Increment loop variable
         
         return sections
     
@@ -248,14 +274,18 @@ class SectionProcessor:
         Returns:
             Updated list of sections with identified subsections
         """
-        for section in sections:
+        section_idx = 0 # Initialize loop variable
+        while section_idx < len(sections): # Iterate through sections
+            section = sections[section_idx]
             content = section.get('content', '')
             
             # Split content into paragraphs
             paragraphs = re.split(r'\n\s*\n', content)
             
             # Process each paragraph as a potential subsection
-            for paragraph in paragraphs:
+            paragraph_idx = 0 # Initialize loop variable
+            while paragraph_idx < len(paragraphs): # Iterate through paragraphs
+                paragraph = paragraphs[paragraph_idx]
                 if len(paragraph.strip()) > 50:  # Minimum length for a subsection
                     # Clean and preprocess the paragraph
                     cleaned_paragraph = self.preprocess_text(paragraph)
@@ -266,6 +296,8 @@ class SectionProcessor:
                     }
                     
                     section['subsections'].append(subsection)
+                paragraph_idx += 1 # Increment loop variable
+            section_idx += 1 # Increment loop variable
         
         return sections
     
@@ -284,21 +316,43 @@ class SectionProcessor:
         words = text.lower().split()
         
         # Remove punctuation
-        words = [word.strip(string.punctuation) for word in words]
+        cleaned_words = []
+        word_idx = 0 # Initialize loop variable
+        while word_idx < len(words): # Iterate through words
+            word = words[word_idx]
+            cleaned_words.append(word.strip(string.punctuation))
+            word_idx += 1 # Increment loop variable
+        words = cleaned_words
         
         # Remove stopwords and very short words
-        words = [word for word in words if word and word not in self.stop_words and len(word) > 2]
+        filtered_words = []
+        word_idx = 0 # Initialize loop variable
+        while word_idx < len(words): # Iterate through words
+            word = words[word_idx]
+            if word and word not in self.stop_words and len(word) > 2:
+                filtered_words.append(word)
+            word_idx += 1 # Increment loop variable
+        words = filtered_words
         
         # Count word frequencies
         word_freq = {}
-        for word in words:
+        word_idx = 0 # Initialize loop variable
+        while word_idx < len(words): # Iterate through words
+            word = words[word_idx]
             word_freq[word] = word_freq.get(word, 0) + 1
+            word_idx += 1 # Increment loop variable
         
         # Sort by frequency
-        sorted_words = sorted(word_freq.items(), key=lambda x: x[1], reverse=True)
+        sorted_words_items = sorted(word_freq.items(), key=lambda x: x[1], reverse=True)
         
         # Return top N keywords
-        return [word for word, freq in sorted_words[:top_n]]
+        keywords_list = []
+        sorted_word_item_idx = 0 # Initialize loop variable
+        while sorted_word_item_idx < len(sorted_words_items) and sorted_word_item_idx < top_n: # Iterate through top N
+            word, freq = sorted_words_items[sorted_word_item_idx]
+            keywords_list.append(word)
+            sorted_word_item_idx += 1 # Increment loop variable
+        return keywords_list
     
     def enrich_sections(self, sections: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """
@@ -310,7 +364,9 @@ class SectionProcessor:
         Returns:
             Enriched list of sections
         """
-        for section in sections:
+        section_idx = 0 # Initialize loop variable
+        while section_idx < len(sections): # Iterate through sections
+            section = sections[section_idx]
             # Extract keywords from section content
             content = section.get('content', '')
             keywords = self.extract_keywords(content)
@@ -319,12 +375,25 @@ class SectionProcessor:
             section['keywords'] = keywords
             
             # Extract sentences for potential use in subsection analysis (simple split by period)
-            sentences = [s.strip() + '.' for s in content.split('.') if s.strip()]
-            section['sentences'] = sentences[:5]  # Store first 5 sentences
+            sentences_raw = content.split('.')
+            sentences = []
+            sentence_raw_idx = 0 # Initialize loop variable
+            while sentence_raw_idx < len(sentences_raw): # Iterate through raw sentences
+                s = sentences_raw[sentence_raw_idx]
+                if s.strip():
+                    sentences.append(s.strip() + '.')
+                sentence_raw_idx += 1 # Increment loop variable
+            
+            section['sentences'] = []
+            sentence_idx = 0 # Initialize loop variable
+            while sentence_idx < len(sentences) and sentence_idx < 5: # Store first 5 sentences
+                section['sentences'].append(sentences[sentence_idx])
+                sentence_idx += 1 # Increment loop variable
             
             # Calculate section length (word count)
             words = content.split()
             section['word_count'] = len(words)
+            section_idx += 1 # Increment loop variable
         
         return sections
     
@@ -371,8 +440,12 @@ if __name__ == "__main__":
     sections = processor.process_sections(text_by_page, document_name)
     
     print(f"\nFound {len(sections)} processed sections:")
-    for i, section in enumerate(sections):
+    i = 0 # Initialize loop variable
+    while i < len(sections): # Iterate through sections
+        section = sections[i]
         print(f"\n{i+1}. {section['section_title']} (Page {section['page_number']})")
         print(f"   Keywords: {', '.join(section['keywords'])}")
         print(f"   Word count: {section['word_count']}")
         print(f"   Subsections: {len(section['subsections'])}")
+        i += 1 # Increment loop variable
+                         
