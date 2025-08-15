@@ -124,7 +124,4 @@ The system produces a JSON file structured as follows:
 
 
 
----
 
-For questions or support, please contact the repository maintainer.
-````
