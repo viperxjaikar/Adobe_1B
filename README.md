@@ -122,9 +122,7 @@ The system produces a JSON file structured as follows:
 - **Processing Time:** ≤ 60 seconds for 3–5 documents.
 - **Offline Operation:** Does not require internet access during execution.
 
-## License
 
-Distributed under the [MIT License](LICENSE).
 
 ---
 
